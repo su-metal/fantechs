@@ -120,7 +120,7 @@ export default function Home() {
           </div>
 
           {/* AI Chat */}
-          <div className="px-4 pt-4 pb-6">
+          <div className="px-4 pt-4">
             <p className="text-xs text-slate-400 font-semibold tracking-widest mb-2.5 uppercase">
               AIアシスタント
             </p>
@@ -137,6 +137,21 @@ export default function Home() {
                 <p className="text-xs opacity-70">業務の疑問を何でも聞いてみよう</p>
               </div>
               <span className="text-2xl opacity-50">›</span>
+            </Link>
+          </div>
+
+          {/* Admin */}
+          <div className="px-4 pt-3 pb-8">
+            <Link
+              href="/admin"
+              className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-3.5 flex items-center gap-3 hover:bg-slate-50 transition-colors block"
+            >
+              <span className="text-2xl">🔧</span>
+              <div className="flex-1">
+                <p className="font-bold text-sm text-slate-700">記事を追加する</p>
+                <p className="text-xs text-slate-400">AIで新しい業務知識を追加</p>
+              </div>
+              <span className="text-slate-300 text-xl">›</span>
             </Link>
           </div>
         </>
