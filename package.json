@@ -11,7 +11,7 @@
     "preview": "npx wrangler pages dev"
   },
   "dependencies": {
-    "next": "16.2.6",
+    "next": "^15.3.3",
     "openai": "^6.39.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"
