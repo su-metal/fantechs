@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import OpenAI from "openai";
 import { cookies } from "next/headers";
 
@@ -26,14 +25,19 @@ export async function POST(req: NextRequest) {
   const cookieStore = await cookies();
   const token = cookieStore.get("admin_token")?.value;
 
-  try {
-    const { env } = await getCloudflareContext({ async: true }) as unknown as { env: { ADMIN_PASSWORD: string; OPENAI_API_KEY: string } };
-    if (token !== env.ADMIN_PASSWORD) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const apiKey = process.env.OPENAI_API_KEY;
 
+  if (!adminPassword || token !== adminPassword) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!apiKey) {
+    return NextResponse.json({ error: "OPENAI_API_KEYが未設定です" }, { status: 500 });
+  }
+
+  try {
     const { messages } = await req.json() as { messages: OpenAI.Chat.ChatCompletionMessageParam[] };
-    const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
+    const openai = new OpenAI({ apiKey });
 
     const res = await openai.chat.completions.create({
       model: "gpt-5.4-mini",

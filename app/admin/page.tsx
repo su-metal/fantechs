@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import Link from "next/link";
 import AdminClient from "./AdminClient";
 import LoginForm from "./LoginForm";
@@ -10,13 +9,9 @@ export default async function AdminPage() {
   const cookieStore = await cookies();
   const token = cookieStore.get("admin_token")?.value;
 
-  let isAuthenticated = false;
-  try {
-    const { env } = await getCloudflareContext({ async: true }) as unknown as { env: { ADMIN_PASSWORD: string } };
-    isAuthenticated = !!token && token === env.ADMIN_PASSWORD;
-  } catch {
-    // Local dev without wrangler — skip auth
-  }
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  // ADMIN_PASSWORD未設定の場合はローカル開発とみなして認証スキップ
+  const isAuthenticated = !adminPassword || (!!token && token === adminPassword);
 
   if (!isAuthenticated) {
     return <LoginForm />;
