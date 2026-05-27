@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(cd \"F:\\\\App_dev\\\\fantechs\" && Start-Job -ScriptBlock { npm run dev } | Out-Null; Start-Sleep -Seconds 6; Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 5 | Select-Object -ExpandProperty StatusCode)"
+    ]
+  }
+}
