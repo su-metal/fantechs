@@ -3,8 +3,6 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { generateId, parseDbArticle, type DbArticle } from "@/lib/db";
 import { cookies } from "next/headers";
 
-export const runtime = "edge";
-
 // GET /api/articles?category=xxx
 export async function GET(req: NextRequest) {
   const category = req.nextUrl.searchParams.get("category");

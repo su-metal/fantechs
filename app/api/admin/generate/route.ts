@@ -3,8 +3,6 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import OpenAI from "openai";
 import { cookies } from "next/headers";
 
-export const runtime = "edge";
-
 const SYSTEM_PROMPT = `あなたは電気・音響・照明・映像の業務知識を記事化するアシスタントです。
 ユーザーのリクエストに基づいて、現場スタッフ向けの業務知識記事を生成してください。
 
