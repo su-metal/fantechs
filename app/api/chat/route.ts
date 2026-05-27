@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 const SYSTEM_PROMPT =
   "あなたは電気・音響・照明・映像の業務知識に詳しい先輩スタッフです。新人スタッフの質問にわかりやすく答えてください。専門用語には簡単な補足を添えてください。回答は簡潔にまとめ、必要に応じて箇条書きや表を使ってください。日本語で答えてください。";
 
