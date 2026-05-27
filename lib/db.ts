@@ -4,6 +4,7 @@ export type DbArticle = {
   title: string;
   tags: string; // JSON string
   content: string;
+  sort_order: number;
   created_at: string;
 };
 
@@ -13,6 +14,7 @@ export type ArticleRow = {
   title: string;
   tags: string[];
   content: string;
+  sort_order: number;
   created_at: string;
 };
 

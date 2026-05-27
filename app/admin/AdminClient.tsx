@@ -2,6 +2,7 @@
 import { useState } from "react";
 import ContentRenderer from "@/components/ContentRenderer";
 import { KNOWLEDGE } from "@/lib/knowledge";
+import ArticleManager from "./ArticleManager";
 
 type Article = {
   title: string;
@@ -19,7 +20,10 @@ const categoryLabels: Record<string, string> = {
   video: "📹 映像",
 };
 
+type Tab = "generate" | "manage";
+
 export default function AdminClient() {
+  const [tab, setTab] = useState<Tab>("generate");
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: "どんな記事を追加しますか？\n例：「音響のEQの使い方について記事を作って」" },
   ]);
@@ -86,6 +90,29 @@ export default function AdminClient() {
 
   return (
     <div className="flex flex-col gap-4 pb-8">
+      {/* Tabs */}
+      <div className="flex bg-white rounded-xl shadow-sm overflow-hidden">
+        <button
+          onClick={() => setTab("generate")}
+          className={`flex-1 py-3 text-sm font-bold transition-colors ${
+            tab === "generate" ? "bg-slate-800 text-white" : "text-slate-500 hover:bg-slate-50"
+          }`}
+        >
+          🤖 記事生成
+        </button>
+        <button
+          onClick={() => setTab("manage")}
+          className={`flex-1 py-3 text-sm font-bold transition-colors ${
+            tab === "manage" ? "bg-slate-800 text-white" : "text-slate-500 hover:bg-slate-50"
+          }`}
+        >
+          📝 記事管理
+        </button>
+      </div>
+
+      {tab === "manage" && <ArticleManager />}
+
+      {tab === "generate" && <>
       {/* Chat */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <div className="bg-slate-800 text-white px-4 py-2.5 text-sm font-bold">💬 AIと会話して記事を生成</div>
@@ -180,6 +207,7 @@ export default function AdminClient() {
           ))}
         </div>
       </div>
+      </>}
     </div>
   );
 }
