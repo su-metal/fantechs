@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const openai = new OpenAI({ apiKey });
 
     const res = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-5.4-mini",
       max_tokens: 1024,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
