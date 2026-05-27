@@ -13,7 +13,7 @@ async function fetchDbArticles(category: string): Promise<ArticleRow[]> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { env } = await getCloudflareContext({ async: true }) as unknown as { env: { DB: any } };
     const result = await env.DB.prepare(
-      "SELECT * FROM articles WHERE category = ? ORDER BY created_at DESC"
+      "SELECT * FROM articles WHERE category = ? ORDER BY sort_order ASC, created_at DESC"
     ).bind(category).all() as { results: DbArticle[] };
     return result.results.map(parseDbArticle);
   } catch {

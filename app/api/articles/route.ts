@@ -21,6 +21,28 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// PATCH /api/articles  — reorder (admin only)
+export async function PATCH(req: NextRequest) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("admin_token")?.value;
+
+  try {
+    const { env } = await getCloudflareContext({ async: true }) as unknown as { env: { DB: D1Database; ADMIN_PASSWORD: string } };
+    if (env.ADMIN_PASSWORD && token !== env.ADMIN_PASSWORD) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const { ids } = await req.json() as { ids: string[] };
+    const statements = ids.map((id, index) =>
+      env.DB.prepare("UPDATE articles SET sort_order = ? WHERE id = ?").bind(index, id)
+    );
+    await env.DB.batch(statements);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: "Failed to reorder" }, { status: 500 });
+  }
+}
+
 // POST /api/articles  (admin only)
 export async function POST(req: NextRequest) {
   const cookieStore = await cookies();
