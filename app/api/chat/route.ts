@@ -32,8 +32,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ content });
   } catch (err) {
     console.error(err);
+    const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json(
-      { content: "エラーが発生しました。" },
+      { content: `エラー: ${message}` },
       { status: 500 }
     );
   }
