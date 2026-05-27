@@ -35,7 +35,7 @@ export default function ChatPage() {
           messages: [...messages.map((m) => ({ role: m.role, content: m.content })), { role: "user", content: msg }],
         }),
       });
-      const data = await res.json();
+      const data = await res.json() as { content?: string };
       setMessages((p) => [
         ...p,
         {

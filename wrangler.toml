@@ -6,3 +6,8 @@ compatibility_flags = ["nodejs_compat"]
 [assets]
 directory = ".open-next/assets"
 binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "fantechs-db"
+database_id = "9d752d93-bd1d-4ab9-ba2e-e2e042f2d2a0"

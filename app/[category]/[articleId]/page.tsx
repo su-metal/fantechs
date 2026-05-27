@@ -3,15 +3,40 @@ import { notFound } from "next/navigation";
 import { KNOWLEDGE } from "@/lib/knowledge";
 import ContentRenderer from "@/components/ContentRenderer";
 import OhmCalculator from "@/components/OhmCalculator";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { parseDbArticle, type DbArticle, type ArticleRow } from "@/lib/db";
+
+export const dynamicParams = true;
 
 type Props = { params: Promise<{ category: string; articleId: string }> };
+
+async function fetchDbArticle(category: string, id: string): Promise<ArticleRow | null> {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { env } = await getCloudflareContext({ async: true }) as unknown as { env: { DB: any } };
+    const row = await env.DB.prepare(
+      "SELECT * FROM articles WHERE id = ? AND category = ?"
+    ).bind(id, category).first() as DbArticle | null;
+    return row ? parseDbArticle(row) : null;
+  } catch {
+    return null;
+  }
+}
 
 export default async function ArticlePage({ params }: Props) {
   const { category, articleId } = await params;
   const cat = KNOWLEDGE[category];
   if (!cat) notFound();
 
-  const article = cat.articles.find((a) => a.id === articleId);
+  // Check static articles first
+  const staticArticle = cat.articles.find((a) => a.id === articleId);
+
+  // For DB articles (ids starting with "db_"), fetch from D1
+  const dbArticle = !staticArticle && articleId.startsWith("db_")
+    ? await fetchDbArticle(category, articleId)
+    : null;
+
+  const article = staticArticle ?? dbArticle;
   if (!article) notFound();
 
   return (
